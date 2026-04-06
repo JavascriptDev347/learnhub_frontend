@@ -90,11 +90,11 @@
             <nav v-if="isMenuOpen" class="md:hidden border-t border-gray-100 bg-white">
                 <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-1">
                     <!-- Add more mobile nav links here as needed -->
-                    <RouterLink to="/courses"
+                    <!-- <RouterLink to="/courses"
                         class="text-sm text-gray-700 font-medium px-3 py-2.5 rounded-lg hover:bg-gray-100 transition-colors"
                         @click="isMenuOpen = false">
                         Courses
-                    </RouterLink>
+                    </RouterLink> -->
                     <RouterLink to="/login"
                         class="text-sm text-gray-700 font-medium px-3 py-2.5 rounded-lg hover:bg-gray-100 transition-colors"
                         @click="isMenuOpen = false">
