@@ -1,0 +1,1 @@
+export { default as EdaIcon } from './svg/eda.svg'
