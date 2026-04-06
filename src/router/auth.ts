@@ -13,10 +13,7 @@ const routes = [{
             name: 'register',
             component: () => import('@/features/auth/views/RegisterPage.vue'),
         },
-        {
-            path: '',
-            redirect: 'login'
-        }
+       
     ]
 
 }
