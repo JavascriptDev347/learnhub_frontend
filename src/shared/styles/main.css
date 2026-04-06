@@ -1,0 +1,13 @@
+/* Google Fonts - Eng yuqorida bo'lishi SHART */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+/* Tailwind v4 */
+@import "tailwindcss";
+
+/* Poppins shriftini sozlash */
+@theme {
+    --font-poppins: "Poppins", system-ui, sans-serif;
+
+    /* Butun loyihada default shrift sifatida Poppins */
+    --font-sans: "Poppins", system-ui, sans-serif;
+}
