@@ -35,7 +35,7 @@
                 <!-- Desktop nav links -->
                 <nav class="hidden md:flex items-center gap-2 flex-shrink-0">
                     <!-- Add more nav links here as needed -->
-                    <RouterLink to="/courses"
+                    <RouterLink to="/my-courses"
                         class="text-sm text-gray-600 hover:text-gray-900 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors font-medium">
                         Courses
                     </RouterLink>
@@ -126,6 +126,6 @@ function toggleMobileMenu() {
 
 function handleSearch() {
     if (!searchQuery.value.trim()) return
-    router.push({ path: '/courses', query: { q: searchQuery.value.trim() } })
+    router.push({ path: '/my-courses', query: { q: searchQuery.value.trim() } })
 }
 </script>
