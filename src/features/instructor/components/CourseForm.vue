@@ -29,8 +29,8 @@ import { watch } from 'vue'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import BaseInput from '@/shared/components/ui/BaseInput.vue'
-import { courseSchema } from '../types/course.schema'
-import type { Course, CourseForm as CourseFormType } from '../types/course.types'
+import { courseSchema } from '../../courses/types/course.schema'
+import type { Course, CourseForm as CourseFormType } from '../../courses/types/course.types'
 
 // ---------- Props & Emits ----------
 interface Props {

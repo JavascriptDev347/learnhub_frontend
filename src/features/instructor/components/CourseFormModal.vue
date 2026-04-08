@@ -24,7 +24,7 @@
 import { ref, watch } from 'vue'
 import AppModal from '@/shared/components/ui/AppModal.vue'
 import CourseForm from './CourseForm.vue'
-import type { Course, CourseForm as CourseFormType } from '../types/course.types'
+import type { Course, CourseForm as CourseFormType } from '../../courses/types/course.types'
 
 // ---------- Props & Emits ----------
 interface Props {

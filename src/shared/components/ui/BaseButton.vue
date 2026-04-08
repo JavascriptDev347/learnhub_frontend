@@ -1,7 +1,7 @@
 <template>
     <button :type="type" :disabled="disabled" :class="[sizeClass, { 'opacity-50 cursor-not-allowed': disabled }]"
-        :style="{ borderRadius: `${borderRadius}px` }" class="bg-yellow-400 text-gray-900 font-semibold transition-all duration-300
-           hover:bg-yellow-500 active:scale-95  cursor-pointer
+        :style="{ borderRadius: `${borderRadius}px`, cursor: 'pointer' }" class="bg-yellow-400 text-gray-900 font-semibold transition-all duration-300
+           hover:bg-yellow-500 active:scale-95  
            inline-flex items-center justify-center" @click="handleClick">
         <slot>
             {{ label }}

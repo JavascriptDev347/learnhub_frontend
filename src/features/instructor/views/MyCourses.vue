@@ -2,10 +2,10 @@
     <div>
         <div class="flex items-center justify-between mb-5">
             <h1 class="text-2xl font-bold text-gray-900">My Courses</h1>
-            <button @click="isModalOpen = true" class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold
+            <router-link to="/create-course" class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold
                px-6 py-2.5 rounded-full text-sm transition-colors cursor-pointer">
                 + Create New Course
-            </button>
+            </router-link>
         </div>
 
         <!-- Filters + Sort -->
@@ -28,10 +28,6 @@
         <AppPagination :params="paginationParams" @change-page="onPageChange" />
     </div>
 
-    <CourseFormModal v-model:is-open="isModalOpen" :mode="modalMode" :course="courses" @submitted="onSubmitted" />
-
-
-
 </template>
 
 <script setup lang="ts">
@@ -41,21 +37,6 @@ import AppPagination from '@/shared/components/ui/AppPagination.vue'
 import type { SelectOption } from '@/shared/components/ui/AppSelect.vue'
 import AppSelect from '@/shared/components/ui/AppSelect.vue'
 import CourseTable from '../components/CourseTable.vue'
-import CourseFormModal from '../components/CourseFormModal.vue'
-import type { Course } from '../types/course.types'
-
-const isModalOpen = ref(false)
-const modalMode = ref<'create' | 'edit'>('edit')
-const selectedCourse = ref<Course | null>(null)
-
-const courses = ref<Course>(
-    { id: 1, title: 'Vue 3', description: '...', price: 49, status: 'published' },
-)
-
-
-function onSubmitted() {
-    console.log('Muvaffaqiyatli saqlandi!')
-}
 
 
 const statusOptions: SelectOption[] = [
@@ -93,8 +74,6 @@ const paginationParams = reactive<PaginationParams>({
 function onPageChange(page: number) {
     paginationParams.page = page
 }
-
-
 
 
 </script>

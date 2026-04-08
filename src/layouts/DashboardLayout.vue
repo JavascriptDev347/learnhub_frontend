@@ -6,7 +6,7 @@
 
         <div class="flex">
             <!-- Asosiy kontent -->
-            <main class="flex-1">
+            <main class="flex-1 bg-gray-50">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                     <router-view />
                 </div>
