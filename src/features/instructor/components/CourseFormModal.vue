@@ -11,7 +11,7 @@
                 <button class="btn btn--ghost" type="button" @click="emit('update:isOpen', false)">
                     Bekor qilish
                 </button>
-                <button class="btn btn--primary" type="button" :disabled="isLoading" @click="formRef?.handleSubmit()">
+                <button class="btn btn--primary" type="button" :disabled="isLoading" @click="formRef?.onSubmit()">
                     <span v-if="isLoading" class="btn__spinner" />
                     {{ mode === 'create' ? 'Yaratish' : 'Saqlash' }}
                 </button>
@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import AppModal from '@/shared/components/ui/AppModal.vue'
 import CourseForm from './CourseForm.vue'
 import type { Course, CourseForm as CourseFormType } from '../types/course.types'
@@ -45,7 +45,12 @@ const emit = defineEmits<{
 // ---------- State ----------
 const formRef = ref<InstanceType<typeof CourseForm> | null>(null)
 const isLoading = ref(false)
-
+watch(
+    () => props.isOpen,
+    (val) => {
+        if (!val) formRef.value?.resetForm()
+    }
+)
 // ---------- Submit ----------
 async function onFormSubmit(payload: CourseFormType) {
     try {

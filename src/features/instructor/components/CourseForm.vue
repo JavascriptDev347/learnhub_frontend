@@ -1,19 +1,19 @@
 <template>
-    <form class="course-form" @submit.prevent="handleSubmit">
+    <form class="course-form" @submit.prevent="onSubmit">
 
-        <BaseInput v-model="form.title" label="Kurs nomi" placeholder="Masalan: Vue 3 boshliqdan professional darajaga"
-            width="100%" :error="errors.title" />
+        <BaseInput v-model="title" v-bind="titleAttrs" label="Kurs nomi"
+            placeholder="Masalan: Vue 3 boshliqdan professional darajaga" width="100%" :error="errors.title" />
 
-        <BaseInput v-model="form.description" label="Tavsif" placeholder="Kurs haqida qisqacha..." width="100%"
-            :error="errors.description" />
+        <BaseInput v-model="description" v-bind="descriptionAttrs" label="Tavsif" placeholder="Kurs haqida qisqacha..."
+            width="100%" :error="errors.description" />
 
         <div class="course-form__row">
-            <BaseInput v-model.number="form.price" type="number" label="Narxi ($)" placeholder="0" width="100%"
+            <BaseInput v-model="price" v-bind="priceAttrs" type="number" label="Narxi ($)" placeholder="0" width="100%"
                 :error="errors.price" />
 
             <div class="course-form__group">
                 <label class="course-form__label">Holati</label>
-                <select v-model="form.status" class="course-form__select">
+                <select v-model="status" v-bind="statusAttrs" class="course-form__select">
                     <option value="draft">Draft</option>
                     <option value="published">Published</option>
                     <option value="archived">Archived</option>
@@ -25,17 +25,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { watch } from 'vue'
+import { useForm } from 'vee-validate'
+import { toTypedSchema } from '@vee-validate/zod'
 import BaseInput from '@/shared/components/ui/BaseInput.vue'
+import { courseSchema } from '../types/course.schema'
 import type { Course, CourseForm as CourseFormType } from '../types/course.types'
-// ---------- Types ----------
+
+// ---------- Props & Emits ----------
 interface Props {
     mode: 'create' | 'edit'
     course?: Course | null
     isLoading?: boolean
 }
 
-// ---------- Props & Emits ----------
 const props = withDefaults(defineProps<Props>(), {
     course: null,
     isLoading: false,
@@ -45,58 +48,46 @@ const emit = defineEmits<{
     submit: [payload: CourseFormType]
 }>()
 
-// ---------- State ----------
-const defaultForm: CourseFormType = {
-    title: '',
-    description: '',
-    price: 0,
-    status: 'draft',
-}
+// ---------- VeeValidate ----------
+const { defineField, handleSubmit, errors, resetForm, setValues } = useForm<CourseFormType>({
+    validationSchema: toTypedSchema(courseSchema),
+    initialValues: {
+        title: '',
+        description: '',
+        price: 0,
+        status: 'draft',
+    },
+})
 
-const form = ref<CourseFormType>({ ...defaultForm })
-const errors = ref<Partial<Record<keyof CourseFormType, string>>>({})
+const [title, titleAttrs] = defineField('title')
+const [description, descriptionAttrs] = defineField('description')
+const [price, priceAttrs] = defineField('price')
+const [status, statusAttrs] = defineField('status')
 
-// ---------- Edit rejimida to'ldirish ----------
+// ---------- Edit rejimida formni to'ldirish ----------
 watch(
     () => props.course,
     (course) => {
         if (props.mode === 'edit' && course) {
-            form.value = {
+            setValues({
                 title: course.title,
                 description: course.description,
                 price: course.price,
                 status: course.status,
-            }
+            })
         } else {
-            form.value = { ...defaultForm }
+            resetForm()
         }
-        errors.value = {}
     },
     { immediate: true }
 )
 
-// ---------- Validation ----------
-function validate(): boolean {
-    errors.value = {}
+// ---------- Submit ----------
+const onSubmit = handleSubmit((values) => {
+    emit('submit', values)
+})
 
-    if (!form.value.title.trim()) {
-        errors.value.title = 'Kurs nomi majburiy'
-    }
-    if (form.value.price < 0) {
-        errors.value.price = "Narx manfiy bo'lishi mumkin emas"
-    }
-
-    return Object.keys(errors.value).length === 0
-}
-
-// ---------- Submit (parent chaqiradi) ----------
-function handleSubmit() {
-    if (!validate()) return
-    emit('submit', { ...form.value })
-}
-
-// Parent "submit" tugmasini bosganida shu funksiyani chaqiradi
-defineExpose({ handleSubmit })
+defineExpose({ onSubmit, resetForm })
 </script>
 
 <style scoped>
