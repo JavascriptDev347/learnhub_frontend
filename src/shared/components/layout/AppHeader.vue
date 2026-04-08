@@ -2,12 +2,12 @@
     <header class="bg-white border-b-2 border-yellow-400 shadow-sm font-sans sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Main navbar row -->
-            <div class="flex items-center justify-between h-[90px] gap-4">
+            <div class="flex items-center justify-between h-16 sm:h-[90px] gap-2 sm:gap-4 min-w-0">
 
                 <!-- Logo -->
                 <a href="/" class="text-2xl font-bold text-gray-900 flex-shrink-0 tracking-tight"
                     style="font-family: 'Playfair Display', serif;">
-                    <img :src="EdaIcon" alt="Eda Icon">
+                    <img :src="EdaIcon" alt="Eda Icon" class="h-10 w-auto">
                 </a>
 
                 <!-- Search bar (hidden on mobile) -->
@@ -33,9 +33,9 @@
                 </div>
 
                 <!-- Desktop nav links -->
-                <nav class="hidden md:flex items-center gap-2 flex-shrink-0">
+                <nav class="hidden md:flex items-center gap-2 flex-shrink-0 min-w-0">
                     <!-- Add more nav links here as needed -->
-                    <RouterLink to="/courses"
+                    <RouterLink to="/my-courses"
                         class="text-sm text-gray-600 hover:text-gray-900 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors font-medium">
                         Courses
                     </RouterLink>
@@ -126,6 +126,6 @@ function toggleMobileMenu() {
 
 function handleSearch() {
     if (!searchQuery.value.trim()) return
-    router.push({ path: '/courses', query: { q: searchQuery.value.trim() } })
+    router.push({ path: '/my-courses', query: { q: searchQuery.value.trim() } })
 }
 </script>

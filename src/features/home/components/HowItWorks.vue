@@ -1,5 +1,5 @@
 <template>
-    <section class="bg-white py-16 md:py-24 overflow-hidden">
+    <section class="bg-white  overflow-hidden">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <!-- Section Title -->
             <div class="mb-16">

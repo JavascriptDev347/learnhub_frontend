@@ -37,7 +37,7 @@ const emit = defineEmits<{
 
 const sizeMap: Record<ButtonSize, string> = {
     small: 'w-[113px] h-[51px] text-sm',
-    medium: 'w-[174px] h-[70px] text-base',
+    medium: 'w-[241px] h-[64px] text-base',
     large: 'w-[448px] h-[65px] text-lg',
 }
 

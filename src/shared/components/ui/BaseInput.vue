@@ -5,7 +5,7 @@ import { ref, computed, useSlots } from 'vue'
 // Props
 // ──────────────────────────────────────────────
 export interface Props {
-    modelValue?: string
+    modelValue?: string | number
     type?: string
     placeholder?: string
     label?: string
