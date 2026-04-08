@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import authRoutes from '@/router/auth'
 import publicRoutes from '@/router/public'
+import instructorRoutes from '@/router/instructor'
 const routes = [
   {
     path: "/",
@@ -8,6 +9,7 @@ const routes = [
   },
   ...publicRoutes,
   ...authRoutes,
+  ...instructorRoutes,
 
 ]
 const router = createRouter({
