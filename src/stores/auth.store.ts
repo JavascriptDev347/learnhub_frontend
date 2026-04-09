@@ -12,6 +12,7 @@ export const useAuthStore = defineStore('auth', () => {
     const isAuthenticated = computed(() => !!accessToken.value)
     const isAdmin = computed(() => user.value?.role === 'admin')
     const isInstructor = computed(() => user.value?.role === 'instructor')
+    const isStudent = computed(() => user.value?.role === 'student')
     const fullName = computed(() => {
         if (!user.value) return ''
         return `${user.value.firstName} ${user.value.lastName}`
@@ -42,6 +43,7 @@ export const useAuthStore = defineStore('auth', () => {
         refreshToken,
         isAuthenticated,
         isAdmin,
+        isStudent,
         isInstructor,
         fullName,
         setAuth,

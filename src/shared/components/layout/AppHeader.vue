@@ -35,18 +35,11 @@
                 <!-- Desktop nav links -->
                 <nav class="hidden md:flex items-center gap-2 flex-shrink-0 min-w-0">
                     <!-- Add more nav links here as needed -->
-                    <RouterLink to="/my-courses"
+                    <RouterLink v-for="value in navItems" :key="value.key" :to="value.to"
                         class="text-sm text-gray-600 hover:text-gray-900 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors font-medium">
-                        Courses
+                        {{ value.label }}
                     </RouterLink>
-                    <RouterLink to="/login"
-                        class="text-sm text-gray-600 hover:text-gray-900 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors font-medium">
-                        Login
-                    </RouterLink>
-                    <RouterLink to="/register"
-                        class="text-sm font-semibold bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-5 py-2 rounded-full transition-colors shadow-sm">
-                        Sign up
-                    </RouterLink>
+
                 </nav>
 
                 <!-- Mobile hamburger button -->
@@ -112,13 +105,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { EdaIcon } from '@/assets/icons'
+import { useAuthStore } from '@/stores/auth.store'
+import { NAV_CONFIG } from '@/shared/config/navigation'
+import { storeToRefs } from 'pinia'
+
+const { isAdmin, isInstructor, isStudent } = storeToRefs(useAuthStore())
 
 const router = useRouter()
 const searchQuery = ref('')
 const isMenuOpen = ref(false)
+
+const navItems = computed(() => {
+    if (isAdmin.value) return NAV_CONFIG.admin
+    if (isInstructor.value) return NAV_CONFIG.instructor
+    if (isStudent.value) return NAV_CONFIG.student
+    return NAV_CONFIG.public
+})
 
 function toggleMobileMenu() {
     isMenuOpen.value = !isMenuOpen.value

@@ -17,7 +17,13 @@ export function useLogin() {
 
         onSuccess(data) {
             authStore.setAuth(data.access_token, data.refresh_token, data.user)
-            router.push('/dashboard')
+            if (authStore.isInstructor) {
+                router.push('/instructor/dashboard')
+            } else if (authStore.isAdmin) {
+                router.push('/admin/dashboard')
+            } else {
+                router.push('/dashboard')
+            }
         },
 
         onError(err: unknown) {

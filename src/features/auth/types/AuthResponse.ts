@@ -1,9 +1,7 @@
 // ─── Umumiy wrapper — TransformInterceptor har doim shu strukturada qaytaradi
-export interface ApiResponse<T> {
-    success: boolean
-    message: string
-    data: T
-}
+
+import type { ApiResponse } from "@/core/api/api.response"
+
 
 // ─── Login uchun data qismi
 export interface LoginData {
