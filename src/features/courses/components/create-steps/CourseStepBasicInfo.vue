@@ -11,51 +11,73 @@
             <!-- Left fields -->
             <div class="flex-1 flex flex-col gap-4">
                 <BaseInput v-model="localForm.title" label="Course Title"
-                    placeholder="e.g. Vue 3 from zero to professional" width="100%" :error="errors.title" />
+                    placeholder="e.g. Vue 3 from zero to professional" width="100%" :error="errors.title"
+                    @input="clearError('title')" />
 
                 <BaseInput v-model="localForm.shortDescription" label="Short Description"
-                    placeholder="Brief summary of the course" width="100%" />
+                    placeholder="Brief summary of the course" width="100%" :error="errors.shortDescription"
+                    @input="clearError('shortDescription')" />
 
                 <!-- Category -->
                 <div class="flex flex-col gap-1.5">
                     <label class="text-sm font-semibold text-gray-800">Category</label>
-                    <select v-model="localForm.category" class="base-select">
+                    <select v-model="localForm.category" class="base-select"
+                        :class="{ 'border-red-400 focus:border-red-400 focus:shadow-red': errors.category }"
+                        @change="clearError('category')">
                         <option value="" disabled>Select category</option>
                         <option value="web-dev">Web Development</option>
                         <option value="mobile">Mobile Development</option>
                         <option value="design">Design</option>
                         <option value="data-science">Data Science</option>
                     </select>
+                    <p v-if="errors.category" class="text-xs text-red-500 mt-0.5">
+                        {{ errors.category }}
+                    </p>
                 </div>
 
                 <!-- Overview -->
                 <div class="flex flex-col gap-1.5">
                     <label class="text-sm font-semibold text-gray-800">Full Course Overview</label>
                     <textarea v-model="localForm.overview" rows="5" placeholder="Detailed description..."
-                        class="base-textarea" />
+                        class="base-textarea"
+                        :class="{ 'border-red-400 focus:border-red-400 focus:shadow-red': errors.overview }"
+                        @input="clearError('overview')" />
+                    <p v-if="errors.overview" class="text-xs text-red-500 mt-0.5">
+                        {{ errors.overview }}
+                    </p>
                 </div>
 
                 <!-- Level + Duration -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="flex flex-col gap-1.5">
                         <label class="text-sm font-semibold text-gray-800">Level</label>
-                        <select v-model="localForm.level" class="base-select">
+                        <select v-model="localForm.level" class="base-select"
+                            :class="{ 'border-red-400 focus:border-red-400 focus:shadow-red': errors.level }"
+                            @change="clearError('level')">
                             <option value="" disabled>Select level</option>
                             <option value="beginner">Beginner</option>
                             <option value="intermediate">Intermediate</option>
                             <option value="advanced">Advanced</option>
                         </select>
+                        <p v-if="errors.level" class="text-xs text-red-500 mt-0.5">
+                            {{ errors.level }}
+                        </p>
                     </div>
 
                     <div class="flex flex-col gap-1.5">
                         <label class="text-sm font-semibold text-gray-800">Estimated Duration</label>
-                        <select v-model="localForm.duration" class="base-select">
+                        <select v-model="localForm.duration" class="base-select"
+                            :class="{ 'border-red-400 focus:border-red-400 focus:shadow-red': errors.duration }"
+                            @change="clearError('duration')">
                             <option value="" disabled>Select duration</option>
                             <option value="0-2">0–2 hours</option>
                             <option value="2-5">2–5 hours</option>
                             <option value="5-10">5–10 hours</option>
                             <option value="10+">10+ hours</option>
                         </select>
+                        <p v-if="errors.duration" class="text-xs text-red-500 mt-0.5">
+                            {{ errors.duration }}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -84,7 +106,8 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import BaseInput from '@/shared/components/ui/BaseInput.vue'
-import type { CreateCourseForm } from '../../types/create-course.type';
+import type { CreateCourseForm } from '../../types/create-course.type'
+import { basicInfoSchema } from '../../types/course.schema';
 
 interface Props {
     modelValue: CreateCourseForm
@@ -99,6 +122,14 @@ const localForm = reactive({ ...props.modelValue })
 const errors = ref<Partial<Record<string, string>>>({})
 const fileInputRef = ref<HTMLInputElement | null>(null)
 const previewUrl = ref<string | null>(null)
+
+// Foydalanuvchi yozishni boshlaganida error ni tozalaydi
+function clearError(field: string) {
+    if (errors.value[field]) {
+        errors.value[field] = undefined
+    }
+    syncParent()
+}
 
 function triggerFileInput() {
     fileInputRef.value?.click()
@@ -120,10 +151,25 @@ function onDrop(e: DragEvent) {
     syncParent()
 }
 
+// Ota-komponent "Next" bosganda chaqiradigan funksiya
 function validate(): boolean {
     errors.value = {}
-    if (!localForm.title.trim()) errors.value.title = 'Title is required'
-    return Object.keys(errors.value).length === 0
+
+    const result = basicInfoSchema.safeParse(localForm)
+
+    if (!result.success) {
+        const fieldErrors = result.error.flatten().fieldErrors
+
+        Object.entries(fieldErrors).forEach(([field, messages]) => {
+            if (messages?.[0]) {
+                errors.value[field] = messages[0]
+            }
+        })
+
+        return false
+    }
+
+    return true
 }
 
 function syncParent() {
@@ -156,5 +202,10 @@ defineExpose({ validate })
 .base-textarea {
     resize: vertical;
     min-height: 120px;
+}
+
+/* Error holati uchun qizil shadow */
+.focus\:shadow-red:focus {
+    box-shadow: 0 0 0 4px rgba(248, 113, 113, 0.15);
 }
 </style>

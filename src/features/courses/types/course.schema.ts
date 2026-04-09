@@ -21,43 +21,30 @@ export const thumbnailSchema = z
     .refine(f => f.type.startsWith('image/'), 'Only image files allowed')
 
 // ── Step 1 ──
+
 export const basicInfoSchema = z.object({
-    title: z
-        .string()
-        .min(1, 'Course title is required')
-        .min(10, 'Title must be at least 10 characters')
-        .max(100, 'Title must be under 100 characters'),
+    title: z.string()
+        .min(1, 'Title is required')
+        .min(5, 'Title must be at least 5 characters'),
 
-    shortDescription: z
-        .string()
-        .min(1, 'Short description is required')
-        .min(20, 'At least 20 characters')
-        .max(200, 'Max 200 characters'),
+    shortDescription: z.string()
+        .min(1, 'Short description is required'),
 
-    category: z
-        .string()
+    category: z.string()
         .min(1, 'Please select a category'),
 
-    overview: z
-        .string()
-        .max(2000, 'Max 2000 characters')
-        .optional(),
+    overview: z.string()
+        .min(20, 'Overview must be at least 20 characters'),
 
-    level: z
-        .enum(['beginner', 'intermediate', 'advanced'] as const, {
-            message: 'Please select a level',
-        })
-        .optional(),
+    level: z.string()
+        .min(1, 'Please select a level'),
 
-    duration: z
-        .enum(['0-2', '2-5', '5-10', '10+'] as const, {
-            message: 'Please select duration',
-        })
-        .optional(),
-
-    thumbnail: thumbnailSchema.nullable().optional()
+    duration: z.string()
+        .min(1, 'Please select duration'),
 })
 
+// Type inference — CreateCourseForm bilan mos bo'ladi
+export type BasicInfoFields = z.infer<typeof basicInfoSchema>
 // ── Step 2 ──
 export const curriculumSchema = z.object({
     sections: z
