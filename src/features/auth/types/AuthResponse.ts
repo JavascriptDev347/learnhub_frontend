@@ -10,6 +10,7 @@ export interface LoginData {
     refresh_token: string
 }
 
+export type UserResponse = ApiResponse<IUser>
 // Login response = wrapper + data
 export type LoginResponse = ApiResponse<LoginData>
 

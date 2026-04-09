@@ -2,10 +2,10 @@
     <header class="bg-white border-b-2 border-yellow-400 shadow-sm font-sans sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Main navbar row -->
-            <div class="flex items-center justify-between h-16 sm:h-[90px] gap-2 sm:gap-4 min-w-0">
+            <div class="flex items-center justify-between h-16 sm:h-22.5 gap-2 sm:gap-4 min-w-0">
 
                 <!-- Logo -->
-                <a href="/" class="text-2xl font-bold text-gray-900 flex-shrink-0 tracking-tight"
+                <a href="/" class="text-2xl font-bold text-gray-900 flex-0 tracking-tight"
                     style="font-family: 'Playfair Display', serif;">
                     <img :src="EdaIcon" alt="Eda Icon" class="h-10 w-auto">
                 </a>
@@ -14,7 +14,7 @@
                 <div class="hidden md:flex flex-1 max-w-xl mx-4">
                     <div
                         class="flex items-center w-full bg-gray-100 border border-gray-200 rounded-full px-4 py-2 transition-all focus-within:ring-2 focus-within:ring-yellow-400">
-                        <svg class="w-4 h-4 text-gray-400 flex-shrink-0 mr-2" fill="none" stroke="currentColor"
+                        <svg class="w-4 h-4 text-gray-400 flex-0 mr-2" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
@@ -39,7 +39,10 @@
                         class="text-sm text-gray-600 hover:text-gray-900 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors font-medium">
                         {{ value.label }}
                     </RouterLink>
-
+                    <!--      notification-->
+                    <HeaderNotification v-if="isUserActive" />
+                    <!-- avatar -->
+                    <HeaderUser v-if="isUserActive" />
                 </nav>
 
                 <!-- Mobile hamburger button -->
@@ -83,21 +86,12 @@
             <nav v-if="isMenuOpen" class="md:hidden border-t border-gray-100 bg-white">
                 <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-1">
                     <!-- Add more mobile nav links here as needed -->
-                    <!-- <RouterLink to="/courses"
-                        class="text-sm text-gray-700 font-medium px-3 py-2.5 rounded-lg hover:bg-gray-100 transition-colors"
-                        @click="isMenuOpen = false">
-                        Courses
-                    </RouterLink> -->
-                    <RouterLink to="/login"
-                        class="text-sm text-gray-700 font-medium px-3 py-2.5 rounded-lg hover:bg-gray-100 transition-colors"
-                        @click="isMenuOpen = false">
-                        Login
+
+                    <RouterLink v-for="value in navItems" :key="value.key" :to="value.to"
+                        class="text-sm text-gray-600 hover:text-gray-900 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors font-medium">
+                        {{ value.label }}
                     </RouterLink>
-                    <RouterLink to="/register"
-                        class="text-sm font-semibold bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2.5 rounded-lg transition-colors text-center mt-1"
-                        @click="isMenuOpen = false">
-                        Sign up
-                    </RouterLink>
+
                 </div>
             </nav>
         </Transition>
@@ -111,13 +105,13 @@ import { EdaIcon } from '@/assets/icons'
 import { useAuthStore } from '@/stores/auth.store'
 import { NAV_CONFIG } from '@/shared/config/navigation'
 import { storeToRefs } from 'pinia'
-
+import HeaderNotification from './HeaderNotification.vue'
+import HeaderUser from './HeaderUser.vue'
 const { isAdmin, isInstructor, isStudent } = storeToRefs(useAuthStore())
 
 const router = useRouter()
 const searchQuery = ref('')
 const isMenuOpen = ref(false)
-
 const navItems = computed(() => {
     if (isAdmin.value) return NAV_CONFIG.admin
     if (isInstructor.value) return NAV_CONFIG.instructor
@@ -125,6 +119,7 @@ const navItems = computed(() => {
     return NAV_CONFIG.public
 })
 
+const isUserActive = computed(() => isAdmin.value || isInstructor.value || isStudent.value)
 function toggleMobileMenu() {
     isMenuOpen.value = !isMenuOpen.value
 }
