@@ -1,10 +1,6 @@
 import {
-    BookOpen,
-    Users,
-    DollarSign,
-    GraduationCap,
-    ClipboardList,
-    Compass,
+    BookOpen
+
 } from 'lucide-vue-next'
 import type { Component } from 'vue'
 

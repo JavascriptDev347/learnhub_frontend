@@ -22,7 +22,7 @@ export function useLogin() {
             } else if (authStore.isAdmin) {
                 router.push('/admin/dashboard')
             } else {
-                router.push('/dashboard')
+                router.push('/student/dashboard')
             }
         },
 

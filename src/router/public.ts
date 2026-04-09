@@ -7,11 +7,9 @@ const routes = [{
             path: 'home',
             name: 'home',
             component: () => import('@/features/home/views/index.vue'),
+
         },
-        {
-            path: '',
-            redirect: 'home'
-        }
+
 
     ]
 }]

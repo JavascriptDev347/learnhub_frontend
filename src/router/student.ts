@@ -6,6 +6,7 @@ const routes = [{
             path: "/student/dashboard",
             name: "student-dashboard",
             component: () => import('@/features/student/views/DashboardStudent.vue'),
+            meta: { roles: ["student"] }
         },
 
 
